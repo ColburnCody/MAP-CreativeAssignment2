@@ -1,6 +1,5 @@
 import 'package:CreativeAssignment2/model/listitem.dart';
 import 'package:CreativeAssignment2/screen/additem_screen.dart';
-import 'package:CreativeAssignment2/screen/removeitem_screen.dart';
 import 'package:flutter/material.dart';
 
 class StartScreen extends StatefulWidget {
@@ -27,17 +26,29 @@ class _StartState extends State<StartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Get it together, man'), actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: con.add,
-        ),
-        IconButton(icon: Icon(Icons.delete), onPressed: con.delete),
-      ]),
-      body: SingleChildScrollView(
-        child: Column(
-          children: con.getSchedule(),
-        ),
+      appBar: AppBar(
+        title: Text('Get it together, man'),
+        actions: <Widget>[
+          con.selected != null
+              ? [
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: con.delete,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.cancel),
+                    onPressed: con.cancel,
+                  ),
+                ]
+              : IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: con.add,
+                ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: todoList.length,
+        itemBuilder: con.getTile,
       ),
     );
   }
@@ -47,47 +58,50 @@ class _Controller {
   _StartState state;
   _Controller(this.state);
 
-  List<Widget> getSchedule() {
-    return todoList.map((listitem) {
-      return Card(
-        margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-        color: Colors.green[300],
-        elevation: 15.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+  List<int> selected;
+  final Color selectedColor = Colors.green[500];
+  final Color unselectedColor = Colors.green[200];
+
+  Widget getTile(BuildContext context, int index) {
+    return Container(
+      color: (selected != null && selected.indexOf(index) >= 0)
+          ? selectedColor
+          : unselectedColor,
+      padding: EdgeInsets.all(10.0),
+      margin: EdgeInsets.all(10.0),
+      child: ListTile(
+        title: Text(todoList[index].item),
+        subtitle: Text(
+          todoList[index].time,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    listitem.time,
-                    style: Theme.of(state.context).textTheme.headline5,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    listitem.item,
-                    style: Theme.of(state.context).textTheme.headline6,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }).toList();
+        onTap: () {
+          _onTap(context, index);
+        },
+      ),
+    );
+  }
+
+  void _onTap(BuildContext context, int index) {
+    if (selected == null) {
+      selected.add(index);
+    }
+    state.render(() {
+      if (selected.indexOf(index) < 0) {
+        selected.add(index);
+      } else {
+        selected.removeWhere((value) => value == index);
+        if (selected.length == 0) selected = null;
+      }
+    });
   }
 
   void add() {
     Navigator.pushNamed(state.context, AddItemScreen.routeName);
   }
 
-  void delete() {
-    Navigator.pushNamed(state.context, RemoveItemScreen.routeName);
+  void delete() {}
+
+  void cancel() {
+    state.render(() => selected = null);
   }
 }
