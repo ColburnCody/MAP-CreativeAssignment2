@@ -1,3 +1,5 @@
+import 'package:CreativeAssignment2/screen/additem_screen.dart';
+import 'package:CreativeAssignment2/screen/removeitem_screen.dart';
 import 'package:CreativeAssignment2/screen/start_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,8 @@ class Creative2App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(initialRoute: StartScreen.routeName, routes: {
       StartScreen.routeName: (context) => StartScreen(),
+      AddItemScreen.routeName: (context) => AddItemScreen(),
+      RemoveItemScreen.routeName: (context) => RemoveItemScreen(),
     });
   }
 }
