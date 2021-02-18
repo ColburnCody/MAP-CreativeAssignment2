@@ -1,3 +1,4 @@
+import 'package:CreativeAssignment2/model/listitem.dart';
 import 'package:flutter/material.dart';
 
 class AddItemScreen extends StatefulWidget {
@@ -9,12 +10,42 @@ class AddItemScreen extends StatefulWidget {
 }
 
 class _AddItemState extends State<AddItemScreen> {
+  _Controller con;
+  @override
+  void initState() {
+    super.initState();
+    con = _Controller(this);
+  }
+
+  void render(fn) {
+    setState(fn);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add item'),
       ),
+      body: TextField(
+        autofocus: true,
+        onSubmitted: (val) {
+          con.addItem(val);
+          Navigator.pop(context);
+        },
+      ),
     );
+  }
+}
+
+class _Controller {
+  _AddItemState state;
+  _Controller(this.state);
+
+  void addItem(String item) {
+    if (item.length > 0) {
+      ListItem task = ListItem(item: item);
+      state.setState(() => todoList.add(task));
+    }
   }
 }

@@ -29,26 +29,15 @@ class _StartState extends State<StartScreen> {
       appBar: AppBar(
         title: Text('Get it together, man'),
         actions: <Widget>[
-          con.selected != null
-              ? [
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: con.delete,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.cancel),
-                    onPressed: con.cancel,
-                  ),
-                ]
-              : IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: con.add,
-                ),
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: con.add,
+          ),
         ],
       ),
       body: ListView.builder(
         itemCount: todoList.length,
-        itemBuilder: con.getTile,
+        itemBuilder: con.buildList,
       ),
     );
   }
@@ -58,50 +47,49 @@ class _Controller {
   _StartState state;
   _Controller(this.state);
 
-  List<int> selected;
-  final Color selectedColor = Colors.green[500];
-  final Color unselectedColor = Colors.green[200];
-
-  Widget getTile(BuildContext context, int index) {
-    return Container(
-      color: (selected != null && selected.indexOf(index) >= 0)
-          ? selectedColor
-          : unselectedColor,
-      padding: EdgeInsets.all(10.0),
-      margin: EdgeInsets.all(10.0),
+  Widget buildList(BuildContext context, int index) {
+    return Card(
+      margin: EdgeInsets.all(16.0),
+      color: Colors.green,
+      elevation: 15.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0),
+      ),
       child: ListTile(
         title: Text(todoList[index].item),
-        subtitle: Text(
-          todoList[index].time,
-        ),
-        onTap: () {
-          _onTap(context, index);
-        },
+        onTap: () => delete(index),
       ),
     );
-  }
-
-  void _onTap(BuildContext context, int index) {
-    if (selected == null) {
-      selected.add(index);
-    }
-    state.render(() {
-      if (selected.indexOf(index) < 0) {
-        selected.add(index);
-      } else {
-        selected.removeWhere((value) => value == index);
-        if (selected.length == 0) selected = null;
-      }
-    });
   }
 
   void add() {
     Navigator.pushNamed(state.context, AddItemScreen.routeName);
   }
 
-  void delete() {}
+  void delete(int index) {
+    showDialog(
+      context: state.context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Mark ${todoList[index].item} as done?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.of(state.context).pop(),
+            ),
+            FlatButton(
+                child: Text('Mark as done'),
+                onPressed: () {
+                  removeItem(index);
+                  Navigator.of(state.context).pop();
+                }),
+          ],
+        );
+      },
+    );
+  }
 
-  void cancel() {
-    state.render(() => selected = null);
+  void removeItem(int index) {
+    state.setState(() => todoList.removeAt(index));
   }
 }
