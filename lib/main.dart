@@ -9,9 +9,16 @@ void main() {
 class Creative2App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(initialRoute: StartScreen.routeName, routes: {
-      StartScreen.routeName: (context) => StartScreen(),
-      AddItemScreen.routeName: (context) => AddItemScreen(),
-    });
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: Colors.green[700],
+        ),
+        initialRoute: StartScreen.routeName,
+        routes: {
+          StartScreen.routeName: (context) => StartScreen(),
+          AddItemScreen.routeName: (context) => AddItemScreen(),
+        });
   }
 }

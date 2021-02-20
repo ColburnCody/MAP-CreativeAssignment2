@@ -1,4 +1,5 @@
 import 'package:CreativeAssignment2/model/listitem.dart';
+import 'package:CreativeAssignment2/screen/start_screen.dart';
 import 'package:flutter/material.dart';
 
 class AddItemScreen extends StatefulWidget {
@@ -43,9 +44,10 @@ class _Controller {
   _Controller(this.state);
 
   void addItem(String item) {
+    var task;
     if (item.length > 0) {
-      ListItem task = ListItem(item: item);
-      state.setState(() => todoList.add(task));
+      task = ListItem(item: item);
+      todoList.add(task);
     }
   }
 }

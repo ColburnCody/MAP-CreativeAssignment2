@@ -27,7 +27,9 @@ class _StartState extends State<StartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Get it together, man'),
+        title: Text(
+          'Get it together, man',
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
@@ -62,8 +64,9 @@ class _Controller {
     );
   }
 
-  void add() {
-    Navigator.pushNamed(state.context, AddItemScreen.routeName);
+  void add() async {
+    await Navigator.pushNamed(state.context, AddItemScreen.routeName);
+    state.render(() {});
   }
 
   void delete(int index) {
