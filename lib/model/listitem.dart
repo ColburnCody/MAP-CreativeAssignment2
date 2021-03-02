@@ -8,7 +8,9 @@ class ListItem {
 
 var todoList = [
   ListItem(
-    item: 'Meeting at',
+    item: 'Meeting',
   ),
-  ListItem(item: 'Lunch with sister'),
+  ListItem(
+    item: 'Lunch with sister',
+  ),
 ];

@@ -1,5 +1,4 @@
 import 'package:CreativeAssignment2/model/listitem.dart';
-import 'package:CreativeAssignment2/screen/start_screen.dart';
 import 'package:flutter/material.dart';
 
 class AddItemScreen extends StatefulWidget {
@@ -28,12 +27,18 @@ class _AddItemState extends State<AddItemScreen> {
       appBar: AppBar(
         title: Text('Add item'),
       ),
-      body: TextField(
-        autofocus: true,
-        onSubmitted: (val) {
-          con.addItem(val);
-          Navigator.pop(context);
-        },
+      body: Column(
+        children: [
+          Container(
+            child: TextField(
+              autofocus: true,
+              onSubmitted: (val) {
+                con.addItem(val);
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

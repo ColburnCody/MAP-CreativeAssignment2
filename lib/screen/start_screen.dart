@@ -28,7 +28,7 @@ class _StartState extends State<StartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Get it together, man',
+          'To Do List',
         ),
         actions: <Widget>[
           IconButton(
@@ -37,9 +37,17 @@ class _StartState extends State<StartScreen> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: todoList.length,
-        itemBuilder: con.buildList,
+      body: Container(
+        child: ListView.builder(
+          itemCount: todoList.length,
+          itemBuilder: con.buildList,
+        ),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/clocks.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }
@@ -58,7 +66,7 @@ class _Controller {
         borderRadius: BorderRadius.circular(30.0),
       ),
       child: ListTile(
-        title: Text(todoList[index].item),
+        title: Text('${todoList[index].item}'),
         onTap: () => delete(index),
       ),
     );
